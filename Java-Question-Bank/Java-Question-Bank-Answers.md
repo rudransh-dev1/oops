@@ -1,14 +1,322 @@
-# Java Question Bank: 20-Mark Answers (VTU style)
+# Java Question Bank — ALL 16 Answers (VTU 20-mark style)
 
 Subject: Object Oriented Programming with Java (BCS306A) | Semester III | VTU
 
-Every answer follows the same exam pattern: **Definition, Points, Syntax, Program with Output**.
-Every program is in the `programs/` folder (one folder per question) and was **compiled and run on JDK 17**.
-The output shown is the real output.
+Every answer follows the same exam pattern: **Definition -> Points -> Syntax -> Program with Output**.
+All 16 questions are answered in full below. Every program is in the `programs/` folder (one folder
+per question, `programs/Q1` ... `programs/Q16`) and every one was **compiled and run on JDK 17**.
+The outputs shown are the real outputs.
 
-> Questions 1, 2, 3, 6, 7, 11, 15 and 16 are already answered in detail in this repo. Links are in the
-> [Quick Map](#quick-map-all-16-questions) at the bottom. This file adds full answers for the remaining
-> ones (4, 5, 8, 9, 10, 12, 13, 14) so the whole question bank is covered.
+**Contents:** 1. OOP principles | 2. Type conversion, casting, promotion | 3. Arrays + matrix addition |
+4. Looping statements | 5. for and for-each | 6. Constructors | 7. Access specifiers | 8. Method overloading |
+9. Method overriding + `super` | 10. `final` | 11. Recursion | 12. Inheritance (single) |
+13. Types of inheritance | 14. Abstract class and method | 15. Operators, precedence, associativity |
+16. Lexical issues.
+
+---
+## 1. Explain the object-oriented principles (features) of OOP in detail.
+
+### Definition
+Object-Oriented Programming (OOP) is a programming approach that organizes a
+program around **objects** (data + the methods that work on it) instead of
+around functions. Its four principles are **Abstraction, Encapsulation,
+Inheritance and Polymorphism**.
+
+### Syntax
+```java
+abstract class ClassName { abstract returnType methodName(); }   // abstraction
+class ClassName { private dataType variableName; }   // encapsulation (private data)
+class SubClass extends SuperClass { }   // inheritance
+returnType methodName(parameters) { }   // polymorphism: overloading/overriding
+```
+
+### Two Paradigms (background)
+1. **Process-oriented (procedural):** code acts on data; data is global and
+   less protected. Example: C.
+2. **Object-oriented:** data and code are bundled into objects; data is
+   protected. Example: Java.
+
+### Principle 1: Abstraction
+Hiding the complex implementation and showing only the essential features.
+1. Focus on **what** an object does, not **how**.
+2. Real life: you drive a car using steering, pedals; you don't need to know
+   how the engine works.
+3. In Java: achieved using **abstract classes** and **interfaces**.
+4. Manages complexity and lets the internal code change without affecting users.
+```java
+abstract class Shape { abstract double area(); }   // only WHAT
+```
+
+### Principle 2: Encapsulation
+Binding data and the methods that operate on it into one unit (the **class**),
+and protecting the data from outside access.
+1. Variables are kept `private`; accessed through `public` getter/setter methods.
+2. Also called **data hiding**.
+3. Gives control: a setter can validate before changing data.
+4. Real life: a medicine capsule keeps the contents safe inside.
+```java
+class Circle {
+    private double r;                       // hidden
+    public double getR() { return r; }
+    public void setR(double r) { if (r > 0) this.r = r; }   // validation
+}
+```
+
+### Principle 3: Inheritance
+One class (subclass) acquires the properties and methods of another class
+(superclass) using the `extends` keyword.
+1. Promotes **code reusability**: write common code once.
+2. Creates an **IS-A** relationship (Circle IS-A Shape).
+3. Subclass can add new members or override inherited methods.
+4. Java supports single, multilevel and hierarchical inheritance (multiple
+   inheritance of classes is not allowed; use interfaces).
+```java
+class Animal { void eat() {} }
+class Dog extends Animal { void bark() {} }
+```
+
+### Principle 4: Polymorphism
+"Many forms": the same method name behaves differently in different situations.
+1. **Compile-time polymorphism:** method **overloading** (same name, different
+   parameters, same class).
+2. **Run-time polymorphism:** method **overriding** (subclass redefines the
+   superclass method; chosen at run time by the actual object).
+3. Real life: the same person is a student, a son and a friend.
+```java
+static int add(int a, int b)       { return a + b; }
+static double add(double a, double b) { return a + b; }   // overloading
+```
+
+### Program (`programs/Q1/OOPPrinciplesDemo.java`)
+```java
+abstract class Shape { abstract double area(); }           // ABSTRACTION
+class Circle extends Shape {                               // INHERITANCE
+    private double r;                                      // ENCAPSULATION
+    Circle(double r) { this.r = r; }
+    double area() { return 3.14159 * r * r; }              // POLYMORPHISM (override)
+}
+class Rectangle extends Shape {
+    private double l, b;
+    Rectangle(double l, double b) { this.l = l; this.b = b; }
+    double area() { return l * b; }
+}
+public class OOPPrinciplesDemo {
+    static int add(int a, int b) { return a + b; }
+    static double add(double a, double b) { return a + b; }
+    public static void main(String[] args) {
+        Shape s1 = new Circle(5), s2 = new Rectangle(4, 6);
+        System.out.println("Circle area    = " + s1.area());
+        System.out.println("Rectangle area = " + s2.area());
+        System.out.println(add(2, 3) + " " + add(2.5, 3.5));
+    }
+}
+```
+
+**Output:**
+```
+
+Circle area    = 78.53975
+Rectangle area = 24.0
+5 6.0
+```
+
+
+---
+
+## 2. Explain type conversion, type casting and automatic type promotion in Java with suitable examples.
+
+**Definition:**
+- **Type conversion:** the compiler changes one data type to another automatically.
+- **Type casting:** the programmer changes one data type to another manually using brackets.
+
+**Syntax:**
+```java
+biggerType variable = smallerTypeValue;            // conversion (automatic)
+smallerType variable = (smallerType) biggerValue;  // casting (manual)
+```
+
+### A. Type Conversion (Widening, automatic)
+
+1. Done by the compiler without any extra code.
+2. It happens only when both conditions are true: the two types are compatible, and the destination type is bigger than the source type.
+3. No data is lost.
+4. The order is: `byte -> short -> int -> long -> float -> double`. Also `char -> int`.
+5. Number types are not compatible with `boolean`.
+
+**Example:**
+```java
+int i = 100;
+long l = i;           // int to long
+float f = l;          // long to float
+double d = f;         // float to double
+System.out.println(i + " " + l + " " + f + " " + d);
+```
+Output: `100 100 100.0 100.0`
+
+### B. Type Casting (Narrowing, manual)
+
+1. Needed when a bigger type is put into a smaller type.
+2. The target type is written in brackets before the value.
+3. Data may be lost.
+4. For `double` to `int`, the decimal part is cut off (truncated, not rounded). `(int) 9.99` gives `9`.
+5. When a value is too big for the target type, it is reduced by the range of that type. `(byte) 300` gives `44` because 300 - 256 = 44.
+6. `char` and `int` can be cast to each other.
+
+**Example:**
+```java
+double x = 9.99;
+int y = (int) x;               // 9
+int big = 300;
+byte b = (byte) big;           // 44
+char c = 'A';
+int code = c;                  // 65
+char next = (char) (c + 1);    // 'B'
+```
+Output: `9.99 -> 9`, `300 -> 44`, `A 65 B`
+
+### C. Automatic type promotion in expressions
+
+1. In an expression, `byte`, `short` and `char` are first promoted to `int`.
+2. If any one operand is `long`, `float` or `double`, the whole expression is promoted to that type.
+3. So `byte * byte` gives an `int`.
+
+**Example:**
+```java
+byte p = 50, q = 20;
+int r = p * q;                 // 1000, would not fit in a byte
+System.out.println(7 / 2);             // 3 (int division)
+System.out.println((double) 7 / 2);    // 3.5
+```
+
+### Difference
+
+| Type Conversion | Type Casting |
+|---|---|
+| Done automatically by compiler | Done manually by programmer |
+| Smaller to bigger type | Bigger to smaller type |
+| No data loss | Data may be lost |
+| No brackets needed | Needs `(type)` |
+
+
+### Program (all together)
+```java
+public class ConversionDemo {
+    public static void main(String[] args) {
+        // A. Automatic type conversion (widening)
+        int i = 100;
+        long l = i;            // int -> long
+        float f = l;           // long -> float
+        double d = f;          // float -> double
+        System.out.println("Widening : " + i + " -> " + l + " -> " + f + " -> " + d);
+
+        // B. Type casting (narrowing, manual)
+        double x = 9.99;
+        int y = (int) x;                       // truncated, not rounded
+        int big = 300;
+        byte b = (byte) big;                   // 300 - 256 = 44
+        System.out.println("(int) 9.99 = " + y + ", (byte) 300 = " + b);
+
+        // C. char and int
+        char c = 'A';
+        int code = c;                          // conversion: char -> int
+        char next = (char) (c + 1);            // casting: int -> char
+        System.out.println("char 'A' -> int " + code + ", cast back -> '" + next + "'");
+
+        // D. Automatic type promotion in expressions
+        byte p = 50, q = 20;
+        int r = p * q;                         // byte * byte promoted to int
+        System.out.println("byte*byte promoted to int = " + r);
+        System.out.println("7 / 2 = " + (7 / 2) + ", (double) 7 / 2 = " + ((double) 7 / 2));
+    }
+}
+```
+**Output:**
+```
+Widening : 100 -> 100 -> 100.0 -> 100.0
+(int) 9.99 = 9, (byte) 300 = 44
+char 'A' -> int 65, cast back -> 'B'
+byte*byte promoted to int = 1000
+7 / 2 = 3, (double) 7 / 2 = 3.5
+```
+
+
+---
+
+## 3. How to create and initialize an Array? Write a Java program to implement the addition of two matrices.
+
+**Definition:** An array is a group of variables of the same data type stored under one name. Each element is accessed with an index, and the index starts from 0.
+
+**Syntax:**
+```java
+dataType[] arrayName = new dataType[size];
+```
+
+### Creating an array (two steps)
+
+1. **Declare** the array variable: `int[] a;`
+2. **Allocate memory** using `new`: `a = new int[5];`
+3. Both can be written in one line: `int[] a = new int[5];`
+4. The default value is 0 for numbers, `false` for boolean and `null` for objects.
+5. The size of an array is found using `a.length`.
+
+### Initializing an array
+
+**1. Using index**
+```java
+int[] a = new int[5];
+a[0] = 10;
+```
+
+**2. At the time of declaration**
+```java
+int[] b = {10, 20, 30};
+```
+
+**3. Using a loop**
+```java
+int[] c = new int[3];
+for (int i = 0; i < 3; i++) c[i] = i * 10;
+```
+
+Output for `a[0]`, `a[1]`, `b[2]`, `c[2]`, `b.length` is `10 0 | 30 | 20 | length = 3`.
+
+### Two dimensional array
+
+**Syntax:**
+```java
+dataType[][] arrayName = new dataType[rows][columns];
+```
+```java
+int[][] m = {{1, 2}, {3, 4}};      // 2 rows, 2 columns
+```
+`m[0][1]` is the element in row 0 and column 1, which is `2`.
+
+### Program: addition of two matrices
+
+**Logic:** Add the elements at the same position: `sum[i][j] = m1[i][j] + m2[i][j]`. Matrices must have the same number of rows and columns.
+
+```java
+public class MatrixAdd {
+    public static void main(String[] args) {
+        int[][] m1 = {{1, 2}, {3, 4}};
+        int[][] m2 = {{5, 6}, {7, 8}};
+        int[][] sum = new int[2][2];
+        for (int i = 0; i < 2; i++)
+            for (int j = 0; j < 2; j++)
+                sum[i][j] = m1[i][j] + m2[i][j];
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 2; j++) System.out.print(sum[i][j] + " ");
+            System.out.println();
+        }
+    }
+}
+```
+**Output:**
+```
+6 8
+10 12
+```
+
 
 ---
 
@@ -150,6 +458,169 @@ public class ForLoops {
 for-each sum = 201
 after m=0 in for-each, marks[0] = 45
 ```
+
+---
+
+## 6. What are constructors? Explain the types of constructors with an example program.
+
+**Definition:** A constructor is a special method that initializes an object immediately when it is created. It is called automatically when we use the `new` keyword.
+
+**Syntax:**
+```java
+ClassName(parameters) { statements; }
+```
+
+### Rules of a constructor
+
+1. The constructor name must be the same as the class name.
+2. It has no return type, not even `void`. The implicit return type is the class type itself.
+3. It is called automatically at the time of object creation.
+4. If we do not write any constructor, Java supplies a default one. It sets all instance variables to zero (or `null` / `false`).
+5. Once we write our own constructor, the default constructor is no longer supplied.
+6. Constructors can be overloaded, which means one class can have many constructors with different parameters.
+
+### Types of constructors
+
+#### 1. Default constructor (no parameters)
+Gives the same fixed values to every object.
+```java
+Box() { width = height = depth = -1; }
+```
+
+#### 2. Parameterized constructor
+Takes parameters, so different objects can get different values.
+```java
+Box(double w, double h, double d) { width = w; height = h; depth = d; }
+```
+Also, `Box(double len)` is a parameterized constructor used to make a cube.
+
+#### 3. Copy constructor
+Takes an object of the same class as a parameter and copies its values into the new object.
+```java
+Box(Box ob) { width = ob.width; height = ob.height; depth = ob.depth; }
+```
+
+### Constructor vs Method
+
+| Constructor | Method |
+|---|---|
+| Initializes a new object | Does operations on an existing object |
+| Name same as class name | Name can be anything |
+| No return type | Must have a return type |
+| Called automatically by `new` | Called by the programmer |
+| Cannot be inherited | Can be inherited |
+
+### Program
+```java
+class Box {
+    double width, height, depth;
+    Box() { width = height = depth = -1; }                       // default
+    Box(double len) { width = height = depth = len; }            // cube
+    Box(double w, double h, double d) { width = w; height = h; depth = d; }   // parameterized
+    Box(Box ob) { width = ob.width; height = ob.height; depth = ob.depth; }   // copy
+    double volume() { return width * height * depth; }
+}
+public class ConstructorDemo {
+    public static void main(String[] args) {
+        Box b1 = new Box(10, 20, 15);
+        Box b2 = new Box();
+        Box cube = new Box(7);
+        Box clone = new Box(b1);
+        System.out.println("Volume of b1 is " + b1.volume());
+        System.out.println("Volume of b2 is " + b2.volume());
+        System.out.println("Volume of cube is " + cube.volume());
+        System.out.println("Volume of clone is " + clone.volume());
+    }
+}
+```
+**Output:**
+```
+Volume of b1 is 3000.0
+Volume of b2 is -1.0
+Volume of cube is 343.0
+Volume of clone is 3000.0
+```
+The constructor to run is chosen by the arguments given in `new`.
+
+
+---
+
+## 7. Explain the various access specifiers in Java.
+
+**Definition:** Access specifiers (access modifiers) decide which code can access a class member (variable or method). By allowing access only through a well-defined set of methods, we can prevent misuse of the data. This is called data hiding (encapsulation).
+
+**Syntax:**
+```java
+accessSpecifier dataType variableName;
+accessSpecifier returnType methodName(parameters) { }
+```
+
+Java has four access levels: `public`, `protected`, default (no keyword) and `private`.
+
+### 1. public
+1. Can be accessed by any other code, from anywhere.
+2. `main()` is always `public` because it is called by the Java run-time system, which is outside the program.
+```java
+public int a;
+```
+
+### 2. protected
+1. Can be accessed in the same package, and also by subclasses in other packages.
+2. It matters only when inheritance is involved.
+```java
+protected int b;
+```
+
+### 3. default (no keyword)
+1. When no specifier is written, the member is public within its own package, but cannot be accessed outside the package.
+```java
+int c;
+```
+
+### 4. private
+1. Can be accessed only by the other members of its own class.
+2. Outside code must use public methods (getter and setter).
+```java
+private int d;
+```
+
+### Table
+
+| Specifier | Same class | Same package | Subclass (other package) | Other package |
+|---|---|---|---|---|
+| public | Yes | Yes | Yes | Yes |
+| protected | Yes | Yes | Yes | No |
+| default | Yes | Yes | No | No |
+| private | Yes | No | No | No |
+
+### Program
+```java
+class Test {
+    public int a;          // public
+    protected int b;       // protected
+    int c;                 // default
+    private int d;         // private
+    void setd(int i) { d = i; }
+    int getd() { return d; }
+}
+public class AccessTest {
+    public static void main(String[] args) {
+        Test ob = new Test();
+        ob.a = 10;
+        ob.b = 20;
+        ob.c = 30;
+        // ob.d = 100;     // error: d has private access in Test
+        ob.setd(100);      // OK, through the method
+        System.out.println("a, b, c and d: " + ob.a + " " + ob.b + " " + ob.c + " " + ob.getd());
+    }
+}
+```
+**Output:**
+```
+a, b, c and d: 10 20 30 100
+```
+If we remove the `//` before `ob.d = 100;`, the program will not compile because of the access violation.
+
 
 ---
 
@@ -327,6 +798,81 @@ MAX = 100
 PI  = 3.14159
 Final method: cannot be overridden
 ```
+
+---
+
+## 11. Define recursion. Write a recursive program to find the factorial of a number.
+
+**Definition:** Recursion is the process of defining something in terms of itself. In Java, it is the feature that allows a method to call itself. A method that calls itself is called a recursive method.
+
+**Syntax:**
+```java
+returnType methodName(parameters) { if (base condition) return value; return methodName(smaller value); }
+```
+
+### Points
+
+1. A recursive method must have a **base case**. This is the condition that stops the calls.
+2. It also has a **recursive case**, where the method calls itself with a smaller value.
+3. If the base case is missing, the method never returns and we get `StackOverflowError`.
+4. Every call gets its own new local variables and parameters on the stack. When the calls return, they are removed.
+5. Recursion makes the code of some problems (factorial, Fibonacci, tree traversal) clearer and simpler than loops.
+6. The disadvantage is that it uses more memory because of the stack.
+
+### Factorial
+
+The factorial of N is the product of all numbers from 1 to N. Example: 3! = 1 x 2 x 3 = 6.
+
+```java
+int fact(int n) {
+    if (n == 1) return 1;          // base case
+    return fact(n - 1) * n;        // recursive call
+}
+```
+
+### Working of fact(3)
+```
+fact(3) = fact(2) * 3
+fact(2) = fact(1) * 2
+fact(1) = 1                  <- base case, calls start returning
+fact(2) = 1 * 2 = 2
+fact(3) = 2 * 3 = 6
+```
+
+### Program
+```java
+class Factorial {
+    int fact(int n) {
+        if (n == 1) return 1;
+        return fact(n - 1) * n;
+    }
+}
+public class Recursion {
+    public static void main(String[] args) {
+        Factorial f = new Factorial();
+        System.out.println("Factorial of 3 is " + f.fact(3));
+        System.out.println("Factorial of 4 is " + f.fact(4));
+        System.out.println("Factorial of 5 is " + f.fact(5));
+    }
+}
+```
+**Output:**
+```
+Factorial of 3 is 6
+Factorial of 4 is 24
+Factorial of 5 is 120
+```
+
+### One more example: printing an array recursively
+```java
+void printArray(int i) {
+    if (i == 0) return;                      // base case
+    printArray(i - 1);                       // recursive call
+    System.out.println("[" + (i - 1) + "] " + values[i - 1]);
+}
+```
+Calling `printArray(5)` prints `[0] 0`, `[1] 1`, `[2] 2`, `[3] 3`, `[4] 4`.
+
 
 ---
 
@@ -519,23 +1065,309 @@ Rectangle area = 24.0
 
 ---
 
-## Quick Map: all 16 questions
+## 15. Explain the different types of operators in Java. Explain operator precedence and associativity with suitable examples.
 
-| # | Question | Where the full answer is |
+### Definition
+An operator is a symbol that performs an operation on one or more operands
+(values/variables) and produces a result.
+
+### Syntax
+```java
+operand1 operator operand2;   // e.g. result = a + b; or variable = (condition) ? value1 : value2;
+```
+
+### Types of Operators
+
+#### 1. Arithmetic: `+ - * / %`
+1. `+` add, `-` subtract, `*` multiply, `/` divide, `%` remainder (modulus).
+2. Integer division discards the fraction: `10 / 3 = 3`; `10 % 3 = 1`.
+
+#### 2. Unary: `+ - ++ -- !`
+1. `++` / `--` increase / decrease by 1.
+2. **Post** (`x++`): use the value, then change it. **Pre** (`++x`): change it, then use it.
+3. `-x` negates; `!` reverses a boolean.
+
+#### 3. Relational: `== != > < >= <=`
+1. Compare two values; the result is always `boolean`.
+2. Used in `if` and loops.
+
+#### 4. Logical: `&& || !`
+1. `&&` AND (true only if both true), `||` OR (true if any true), `!` NOT.
+2. **Short-circuit:** `&&` skips the right side if the left is false; `||`
+   skips it if the left is true.
+
+#### 5. Assignment: `= += -= *= /= %=`
+1. `x += 5` means `x = x + 5` (compound assignment).
+
+#### 6. Bitwise: `& | ^ ~`
+Work on individual bits of integers. With `5 = 0101`, `3 = 0011`:
+`5 & 3 = 1`, `5 | 3 = 7`, `5 ^ 3 = 6`, `~5 = -6`.
+
+#### 7. Shift: `<< >> >>>`
+1. `<<` left shift: multiplies by 2 per shift (`8 << 2 = 32`).
+2. `>>` signed right shift: divides by 2, keeps sign (`8 >> 2 = 2`).
+3. `>>>` unsigned right shift: fills with 0 (`-8 >>> 28 = 15`).
+
+#### 8. Ternary: `? :`
+Short form of if-else: `result = (condition) ? value1 : value2;`
+
+#### 9. instanceof
+Checks whether an object belongs to a class; returns `boolean`.
+
+### Program (`programs/OperatorsDemo.java`)
+```java
+public class OperatorsDemo {
+    public static void main(String[] args) {
+        int a = 10, b = 3;
+        System.out.println("a+b=" + (a+b) + " a-b=" + (a-b) + " a*b=" + (a*b) + " a/b=" + (a/b) + " a%b=" + (a%b));
+        int x = 5;
+        System.out.println("x++=" + (x++) + " x=" + x + " ++x=" + (++x) + " -x=" + (-x));
+        System.out.println("a>b " + (a>b) + ", a==b " + (a==b) + ", a!=b " + (a!=b));
+        System.out.println("&&: " + (a>5 && b<5) + "  ||: " + (a<5 || b<5) + "  !: " + !(a>5));
+        int c = 5; c += 3; c *= 2;
+        System.out.println("c=" + c);
+        System.out.println("5&3=" + (5&3) + " 5|3=" + (5|3) + " 5^3=" + (5^3) + " ~5=" + (~5));
+        System.out.println("8<<2=" + (8<<2) + " 8>>2=" + (8>>2) + " -8>>>28=" + (-8>>>28));
+        int max = (a > b) ? a : b;
+        System.out.println("max=" + max);
+        String s = "hi";
+        System.out.println("s instanceof String: " + (s instanceof String));
+    }
+}
+```
+
+**Output:**
+```
+
+a+b=13 a-b=7 a*b=30 a/b=3 a%b=1
+x++=5 x=6 ++x=7 -x=-7
+a>b true, a==b false, a!=b true
+&&: true  ||: true  !: false
+c=16
+5&3=1 5|3=7 5^3=6 ~5=-6
+8<<2=32 8>>2=2 -8>>>28=15
+max=10
+s instanceof String: true
+```
+
+
+---
+
+### Operator precedence and associativity
+
+### Definition
+- **Precedence:** decides which operator is evaluated **first** when an
+  expression has several different operators (higher precedence first).
+- **Associativity:** decides the order (left-to-right or right-to-left) when
+  operators have the **same precedence**.
+
+### Syntax
+```java
+result = operand1 operator1 operand2;   // order decided by precedence table
+```
+
+### Precedence Table (highest to lowest)
+| Level | Operators | Associativity |
 |---|---|---|
-| 1 | Features of OOP | [Module1-College-IMP Q2](../Module1-College-IMP/Java-Module1-College-IMP.md) |
-| 2 | Type conversion and type promotion | [Assignment 1 Q3](../Java-Assignment-1/Java-Assignment-1.md), [College IMP Q8](../Module1-College-IMP/Java-Module1-College-IMP.md) |
-| 3 | Array: declare and initialize | [Assignment 1 Q4](../Java-Assignment-1/Java-Assignment-1.md), [05-Arrays](../Module1-OOP-Java-IMP/05-Arrays.md) |
-| 4 | Looping statements | **This file, Q4** |
-| 5 | for and enhanced for | **This file, Q5** |
-| 6 | Constructors, types, overloading | [Assignment 1 Q5](../Java-Assignment-1/Java-Assignment-1.md) |
-| 7 | Access specifiers | [Assignment 1 Q7](../Java-Assignment-1/Java-Assignment-1.md) |
-| 8 | Method overloading | **This file, Q8** |
-| 9 | Method overriding and `super` | **This file, Q9** (also [Assignment 1 Q10](../Java-Assignment-1/Java-Assignment-1.md)) |
-| 10 | `final` keyword | **This file, Q10** |
-| 11 | Recursion | [Assignment 1 Q6](../Java-Assignment-1/Java-Assignment-1.md) |
-| 12 | Inheritance, single-level | **This file, Q12** |
-| 13 | Types of inheritance | **This file, Q13** |
-| 14 | Abstract class and method | **This file, Q14** |
-| 15 | Operators and precedence | [College IMP Q3, Q9](../Module1-College-IMP/Java-Module1-College-IMP.md) |
-| 16 | Lexical issues | [Assignment 1 Q1](../Java-Assignment-1/Java-Assignment-1.md) |
+| 1 | `()` `[]` `.` | left to right |
+| 2 | `x++` `x--` (postfix) | left to right |
+| 3 | `++x` `--x` `+x` `-x` `!` `~` (unary) | **right to left** |
+| 4 | `*` `/` `%` | left to right |
+| 5 | `+` `-` | left to right |
+| 6 | `<<` `>>` `>>>` | left to right |
+| 7 | `<` `<=` `>` `>=` `instanceof` | left to right |
+| 8 | `==` `!=` | left to right |
+| 9 | `&` | left to right |
+| 10 | `^` | left to right |
+| 11 | `\|` | left to right |
+| 12 | `&&` | left to right |
+| 13 | `\|\|` | left to right |
+| 14 | `? :` (ternary) | **right to left** |
+| 15 | `=` `+=` `-=` ... | **right to left** |
+
+### Examples
+1. `10 + 5 * 2 = 20` : `*` has higher precedence than `+`.
+2. `(10 + 5) * 2 = 30` : parentheses override precedence.
+3. `100 / 10 * 2 = 20` : `/` and `*` are equal, so **left to right**: (100/10)*2.
+4. `a = b = c = 5` : assignment is **right to left**: c=5, then b=c, then a=b.
+5. `2 + 3 + "A" + 2 + 3 = 5A23` : `+` is left to right; 2+3=5 first, then string joining.
+
+### Program (`programs/PrecedenceDemo.java`)
+```java
+public class PrecedenceDemo {
+    public static void main(String[] args) {
+        System.out.println(10 + 5 * 2);
+        System.out.println((10 + 5) * 2);
+        System.out.println(100 / 10 * 2);
+        System.out.println(2 + 3 > 4 && 1 < 2);
+        int a, b, c;
+        a = b = c = 5;
+        System.out.println(a + " " + b + " " + c);
+        int x = 2;
+        int y = x++ + ++x * 2;
+        System.out.println(y + " " + x);
+        System.out.println(true ? 1 : false ? 2 : 3);
+        System.out.println(2 + 3 + "A" + 2 + 3);
+    }
+}
+```
+
+**Output:**
+```
+
+20
+30
+20
+true
+5 5 5
+10 4          <- x++ gives 2 (x becomes 3); ++x makes x 4, gives 4; 2 + 4*2 = 10
+1
+5A23
+```
+
+
+---
+
+## 16. Explain the different lexical issues in Java.
+
+**Definition:** Lexical issues are the basic building blocks used to write a Java program. Before understanding the meaning, the compiler first breaks the program into these small parts, called tokens. A Java program is made of whitespace, identifiers, literals, comments, separators and keywords.
+
+**Syntax:**
+```java
+dataType identifier = literal;
+```
+
+### 1. Whitespace
+
+1. Whitespace means space, tab, new line and form feed.
+2. Java is a free-form language, so we need not follow any special indentation.
+3. Extra spaces and blank lines are ignored by the compiler.
+4. At least one whitespace is needed between two words like `int x`, otherwise `intx` becomes one name.
+
+**Example:**
+```java
+int      studentAge   =   20;      // same as: int studentAge = 20;
+```
+
+### 2. Identifiers
+
+1. Identifiers are the names given to classes, methods and variables.
+2. They can contain letters, digits, underscore `_` and dollar `$`.
+3. They must not start with a digit.
+4. They are case sensitive, so `Total` and `total` are different.
+5. A keyword cannot be used as an identifier.
+6. Valid: `marks1`, `_count`, `$total`. Invalid: `2marks`, `my-name`, `int`.
+
+**Syntax:**
+```java
+dataType identifierName;
+```
+
+**Example:**
+```java
+int _count = 5, $total = 10, marks1 = 85;     // valid identifiers
+// int 2marks = 3;                            // error: starts with a digit
+```
+
+### 3. Literals
+
+1. A literal is a fixed value written directly in the program.
+2. Types: integer, floating-point, character, string, boolean and null.
+
+| Type | Example |
+|---|---|
+| Integer | `100`, `0x1F` (hex), `0b101` (binary), `1_000_000` |
+| Floating-point | `3.14`, `2.5f` |
+| Character | `'A'` |
+| String | `"Ravi"` |
+| Boolean | `true`, `false` |
+| Null | `null` |
+
+**Example:**
+```java
+double pi = 3.14;
+char grade = 'A';
+String name = "Ravi";
+boolean pass = true;
+int hex = 0x1F, bin = 0b101, big = 1_000_000;
+String nothing = null;
+```
+
+### 4. Comments
+
+1. Comments are ignored by the compiler. They are used to explain the code.
+2. Three types: single line `//`, multi line `/* */` and documentation `/** */`.
+
+**Syntax:**
+```java
+// single line comment
+/* multi line comment */
+/** documentation comment */
+```
+
+**Example:**
+```java
+// this is a single line comment
+/* this comment
+   goes to two lines */
+/** Main method of the program */
+```
+
+### 5. Separators
+
+1. Separators are symbols that separate or group the code.
+
+| Symbol | Name | Use |
+|---|---|---|
+| `;` | Semicolon | ends a statement |
+| `,` | Comma | separates variables |
+| `.` | Period | access a member (`System.out`) |
+| `( )` | Parentheses | method calls and conditions |
+| `{ }` | Braces | block of code, array values |
+| `[ ]` | Brackets | arrays |
+
+**Example:**
+```java
+int[] arr = {1, 2, 3};                 // [ ] { } , ;
+System.out.println(arr[0]);            // . ( ) [ ] ;
+```
+
+### 6. Keywords
+
+1. Keywords are reserved words that have a fixed meaning in Java.
+2. They cannot be used as identifier names.
+3. All keywords are in lowercase. Java has 50 keywords, for example `class`, `public`, `static`, `int`, `if`, `for`, `new`, `return`.
+4. `true`, `false` and `null` are also reserved and cannot be used as names.
+
+**Example:**
+```java
+public class LexicalDemo { }       // public, class are keywords; LexicalDemo is an identifier
+```
+
+### Program (all six together)
+```java
+public class LexicalDemo {                 // keywords: public, class | identifier: LexicalDemo
+    /* multi-line comment */
+    public static void main(String[] args) {
+        int      studentAge   =   20;       // whitespace
+        int _count = 5, $total = 10, marks1 = 85;   // identifiers
+        double pi = 3.14;                   // literals
+        char grade = 'A';
+        String name = "Ravi";
+        boolean pass = true;
+        int hex = 0x1F, bin = 0b101, big = 1_000_000;
+        String nothing = null;
+        int[] arr = {1, 2, 3};              // separators
+        System.out.println(name + " " + studentAge + " " + grade + " " + pi + " " + pass);
+        System.out.println(_count + " " + $total + " " + marks1);
+        System.out.println(hex + " " + bin + " " + big + " " + nothing + " " + arr[0]);
+    }
+}
+```
+**Output:**
+```
+Ravi 20 A 3.14 true
+5 10 85
+31 5 1000000 null 1
+```
+
