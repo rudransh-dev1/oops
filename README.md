@@ -21,6 +21,13 @@ For every question:
 
 ## Contents
 
+### Java Question Bank (16 questions, 20-mark VTU style)
+
+| File | Covers |
+|---|---|
+| [Java-Question-Bank/Java-Question-Bank-Answers.md](Java-Question-Bank/Java-Question-Bank-Answers.md) | Looping statements, for and for-each, method overloading, method overriding and `super`, `final`, inheritance (single and all types), abstract class and method, plus a quick map linking all 16 questions to their full answers |
+| [Java-Question-Bank/programs/](Java-Question-Bank/programs/) | 8 runnable programs (one folder per question), all compiled and run on JDK 17 |
+
 ### Java Assignment 1 (college assignment, 10 questions, detailed answers)
 
 | File | Covers |
