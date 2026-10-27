@@ -28,6 +28,31 @@ For every question:
 | [Java-Question-Bank/Java-Question-Bank-Answers.md](Java-Question-Bank/Java-Question-Bank-Answers.md) | Looping statements, for and for-each, method overloading, method overriding and `super`, `final`, inheritance (single and all types), abstract class and method, Definition, Points, Syntax, Program with output for all 16 question-bank questions |
 | [Java-Question-Bank/programs/](Java-Question-Bank/programs/) | 8 runnable programs (one folder per question), all compiled and run on JDK 17 |
 
+### Java Question Bank — ALL 16 questions answered (20-mark VTU style)
+
+One full answer per question: **Definition, Points, Syntax, Program with Output**. All programs compiled and run (JDK 17).
+
+| Q | Question | Answer |
+|---|---|---|
+| 1 | Features / OOP principles | [Q1.md](Java-Question-Bank/questions/Q1.md) |
+| 2 | Type conversion, casting, type promotion | [Q2.md](Java-Question-Bank/questions/Q2.md) |
+| 3 | Array declaration, initialization, matrix addition | [Q3.md](Java-Question-Bank/questions/Q3.md) |
+| 4 | Looping statements | [Q4.md](Java-Question-Bank/questions/Q4.md) |
+| 5 | for loop and for-each loop | [Q5.md](Java-Question-Bank/questions/Q5.md) |
+| 6 | Constructors, types, overloading | [Q6.md](Java-Question-Bank/questions/Q6.md) |
+| 7 | Access specifiers | [Q7.md](Java-Question-Bank/questions/Q7.md) |
+| 8 | Method overloading | [Q8.md](Java-Question-Bank/questions/Q8.md) |
+| 9 | Method overriding and `super` | [Q9.md](Java-Question-Bank/questions/Q9.md) |
+| 10 | `final` keyword | [Q10.md](Java-Question-Bank/questions/Q10.md) |
+| 11 | Recursion (factorial program) | [Q11.md](Java-Question-Bank/questions/Q11.md) |
+| 12 | Inheritance, single-level | [Q12.md](Java-Question-Bank/questions/Q12.md) |
+| 13 | Types of inheritance | [Q13.md](Java-Question-Bank/questions/Q13.md) |
+| 14 | Abstract class and abstract method | [Q14.md](Java-Question-Bank/questions/Q14.md) |
+| 15 | Operators and precedence | [Q15.md](Java-Question-Bank/questions/Q15.md) |
+| 16 | Lexical issues | [Q16.md](Java-Question-Bank/questions/Q16.md) |
+
+All 16 in one file: [Java-Question-Bank-Answers.md](Java-Question-Bank/Java-Question-Bank-Answers.md). Programs: [Java-Question-Bank/programs/](Java-Question-Bank/programs/) (Q1-Q16, one folder per question).
+
 ### Java Assignment 1 (college assignment, 10 questions, detailed answers)
 
 | File | Covers |
